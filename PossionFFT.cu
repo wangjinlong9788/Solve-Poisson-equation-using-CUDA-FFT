@@ -33,30 +33,32 @@ __global__ void complex2real(cufftComplex *fc, float *f, int N)
 
 int main()  
 {
-   int N = 64;   
-   float xmax=1.0f, xmin=0.0f,ymin=0.0f,h=(xmax‐xmin)/((float)N),s=0.1,s2=s*s;   
-   float *x=new float[N*N],*y=new float[N*N],*u=new float[N*N],*f = new float[N*N],*u_a=new float[N*N],*err =new float[N*N];      
+   int N = 64;  //block number 
+   float xmax=1.0f, xmin=0.0f,ymin=0.0f,h=(xmax‐xmin)/((float)N),s=0.1,s2=s*s;   //define interval, sigma
+   float *x=new float[N*N],*y=new float[N*N],*u=new float[N*N],*f = new float[N*N],*u_a=new float[N*N],*err =new float[N*N]; //define x,y,u,ua   
    float r2;          
    for (int j=0; j<N; j++)                 
-		 for (int i=0; i<N; i++)                 
-		 { x[N*j+i] = xmin + i*h;  
-		   y[N*j+i] = ymin + j*h;                        
-		   r2 = (x[N*j+i]-0.5)*(x[N*j+i]-0.5) + (y[N*j+i]-0.5)*(y[N*j+i]-0.5);  
-		   f[N*j+i] = (r2-2*s2)/(s2*s2)*exp(-r2/(2*s2)); 
-		   u_a[N*j+i] = exp(-r2/(2*s2)); // analytical solution     
-		 }          
-    float   *k = new float[N];       
-    for (int i=0; i<=N/2; i++)          
-		 {k[i] = i*2*M_PI;} 
-         for (int i=N/2+1; i<N; i++)          
-		 {
-		   k[i] = (i ‐ N) * 2*M_PI;
-		 }
+      for (int i=0; i<N; i++)                 
+	 { x[N*j+i] = xmin + i*h;  
+	   y[N*j+i] = ymin + j*h;                        
+           r2 = (x[N*j+i]-0.5)*(x[N*j+i]-0.5) + (y[N*j+i]-0.5)*(y[N*j+i]-0.5);  //define r^2
+	   f[N*j+i] = (r2-2*s2)/(s2*s2)*exp(-r2/(2*s2)); //define f at right hand side
+	   u_a[N*j+i] = exp(-r2/(2*s2)); // analytical solution     
+	 }          
+   float   *k = new float[N],M_PI=3.14159;       
+   for (int i=0; i<=N/2; i++)          
+	{
+	   k[i] = i*2*M_PI;
+        } 
+   for (int i=N/2+1; i<N; i++)          
+	 {
+           k[i] = (i ‐ N) * 2*M_PI;
+	 }
 		 
     // Allocate arrays on the device   
-
-	float *k_d, *f_d, *u_d; 
-	cudaMalloc ((void**)&k_d, sizeof(float)*N); 
+	
+        float *k_d, *f_d, *u_d; 
+        cudaMalloc ((void**)&k_d, sizeof(float)*N); 
 	cudaMalloc ((void**)&f_d, sizeof(float)*N*N); 
 	cudaMalloc ((void**)&u_d, sizeof(float)*N*N);
 	cudaMemcpy(k_d, k, sizeof(float)*N, cudaMemcpyHostToDevice);
