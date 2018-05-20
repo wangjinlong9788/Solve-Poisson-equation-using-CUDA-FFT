@@ -1,3 +1,16 @@
+
+
+#include <cmath>
+
+#include <iostream>
+
+#include <fstream>
+
+#include <math.h>
+
+#include <complex>
+
+#include <cufft.h>
 __global__ void solve_poisson(cufftComplex *ft, cufftComplex *ft_k, float *k, int N) 
  {  int i = threadIdx.x + blockIdx.x*BSZ;
     int j = threadIdx.y + blockIdx.y*BSZ; 
