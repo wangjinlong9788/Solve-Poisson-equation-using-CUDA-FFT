@@ -78,7 +78,8 @@ int main()
 	cudaMalloc ((void**)&ft_d_k, sizeof(cufftComplex)*N*N);
 	cudaMalloc ((void**)&f_dc, sizeof(cufftComplex)*N*N); 
 	cudaMalloc ((void**)&u_dc, sizeof(cufftComplex)*N*N); 
-	dim3 dimGrid  (int((N-0.5)/BSZ) + 1, int((N-0.5)/BSZ) + 1); 
+	dim3 dimGrid  (int((N-0.5)/BSZ) + 1, int((N-0.5)/BSZ) + 1);
+	//Built-in variable gridDim specifies the size (or dimension) of the grid
 	dim3 dimBlock (BSZ, BSZ); 
 	real2complex<<<dimGrid, dimBlock>>>(f_d, f_dc, N);
 	cufftHandle plan;
