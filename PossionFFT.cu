@@ -8,6 +8,7 @@
 #include <math.h>
 #include <complex>
 #include <cufft.h>
+//#pragma comment ( lib, "cufft.lib" )
 #define BSZ 16 //block size
 __global__ void solve_poisson(cufftComplex *ft, cufftComplex *ft_k, float *k, int N) 
  {  int i = threadIdx.x + blockIdx.x*BSZ;
@@ -49,7 +50,10 @@ int main()
    int N = 64;  //block number 
    float xmax=1.0f, xmin=0.0f,ymin=0.0f,h=(xmax‐xmin)/((float)N),s=0.1,s2=s*s;   //define interval, sigma
    float *x=new float[N*N],*y=new float[N*N],*u=new float[N*N],*f = new float[N*N],*u_a=new float[N*N],*err =new float[N*N]; //define x,y,u,ua   
-   float r2;          
+   float r2;    
+   clock_t start, stop;
+   double duration;
+   start = clock();
    for (int j=0; j<N; j++)                 
       for (int i=0; i<N; i++)                 
 	 { x[N*j+i] = xmin + i*h;  
@@ -106,5 +110,7 @@ int main()
 	cudaFree(f_dc);
 	cudaFree(ft_d_k);
 	cudaFree(u_dc);
+	stop = clock();
+	duration = (double)(stop-start)*1000/CLOCKS_PER_SEC;
 
 }
