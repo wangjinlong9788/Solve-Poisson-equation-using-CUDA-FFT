@@ -8,7 +8,7 @@
 #include <math.h>
 #include <complex>
 #include <cufft.h>
-#define BSZ 16
+#define BSZ 16 //block size
 __global__ void solve_poisson(cufftComplex *ft, cufftComplex *ft_k, float *k, int N) 
  {  int i = threadIdx.x + blockIdx.x*BSZ;
     int j = threadIdx.y + blockIdx.y*BSZ; 
@@ -23,8 +23,9 @@ __global__ void solve_poisson(cufftComplex *ft, cufftComplex *ft_k, float *k, in
   }
 
 __global__ void real2complex(float *f, cufftComplex *fc, int N) 
-  {          int i = threadIdx.x + blockIdx.x*blockDim.x; 
-  int j = threadIdx.y + blockIdx.y*blockDim.y;  
+  {          
+  int i = threadIdx.x + blockIdx.x*BSZ; 
+  int j = threadIdx.y + blockIdx.y*BSZ;  
   int index = j*N+i;  
   if (i<N && j<N)   
   {       fc[index].x = f[index];     
@@ -33,7 +34,8 @@ __global__ void real2complex(float *f, cufftComplex *fc, int N)
   }  
 
 __global__ void complex2real(cufftComplex *fc, float *f, int N)
-  {          int i = threadIdx.x + blockIdx.x*BSZ;
+  {          
+  int i = threadIdx.x + blockIdx.x*BSZ;
   int j = threadIdx.y + blockIdx.y*BSZ; 
   int index = j*N+i;         
   if (i<N && j<N)  
@@ -83,8 +85,8 @@ int main()
 	//Built-in variable gridDim specifies the size (or dimension) of the grid
 	dim3 dimBlock (BSZ, BSZ); 
 	real2complex<<<dimGrid, dimBlock>>>(f_d, f_dc, N);
-	cufftHandle plan;
-	cufftPlan2d(&plan, N, N, CUFFT_C2C);
+	cufftHandle plan;//Handle type to store CUFFT plans
+	cufftPlan2d(&plan, N, N, CUFFT_C2C);//complex to complex
 	
 	cufftExecC2C(plan, f_dc, ft_d, CUFFT_FORWARD);
 	solve_poisson<<<dimGrid, dimBlock>>>(ft_d, ft_d_k, k_d, N);
