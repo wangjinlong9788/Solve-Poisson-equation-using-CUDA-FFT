@@ -84,14 +84,14 @@ int main()
 	dim3 dimGrid  (int((N-0.5)/BSZ) + 1, int((N-0.5)/BSZ) + 1);
 	//Built-in variable gridDim specifies the size (or dimension) of the grid
 	dim3 dimBlock (BSZ, BSZ); 
-	real2complex<<<dimGrid, dimBlock>>>(f_d, f_dc, N);
+	real2complex<<<dimGrid, dimBlock>>>(f_d, f_dc, N);//real2complex(float *f, cufftComplex *fc, int N) 
 	cufftHandle plan;//Handle type to store CUFFT plans
 	cufftPlan2d(&plan, N, N, CUFFT_C2C);//complex to complex
 	
 	cufftExecC2C(plan, f_dc, ft_d, CUFFT_FORWARD);
-	solve_poisson<<<dimGrid, dimBlock>>>(ft_d, ft_d_k, k_d, N);
+	solve_poisson<<<dimGrid, dimBlock>>>(ft_d, ft_d_k, k_d, N);// solve_poisson(cufftComplex *ft, cufftComplex *ft_k, float *k, int N)
 	cufftExecC2C(plan, ft_d_k, u_dc, CUFFT_INVERSE);
-	complex2real<<<dimGrid, dimBlock>>>(u_dc, u_d, N);
+	complex2real<<<dimGrid, dimBlock>>>(u_dc, u_d, N);//complex2real(cufftComplex *fc, float *f, int N)
 	cudaMemcpy(u, u_d, sizeof(float)*N*N, cudaMemcpyDeviceToHost); 
 	float constant = u[0]; 
 	for (int i=0; i<N*N; i++)
