@@ -26,6 +26,6 @@ cufftHandle plan; // create cuFFT handle
 cufftPlan1d(&plan, N, CUFFT_C2C, BATCH);
 // N here is the length of data, CUFFT_C2C is from complex to complex; Batch execution for multiple transforms,or use cufftPlanMany() instead.
 
-cufftExecC2C(plan, data_dev, data_dev, CUFFT_FORWARD); //the first data_dev is the input data, and the second  data_dev is output data result
+cufftExecC2C(plan, data_dev, data_dev, CUFFT_FORWARD); //the first data_dev is the address of input data, and the second  data_dev is address of output data result
 
 // excute cuFFT with forwad FFT, CUFFT_INVERSE is inverse FFT.watch out: InverseFFT needs to diveded by N after execution.
