@@ -29,4 +29,4 @@ cufftPlan1d(&plan, N, CUFFT_C2C, BATCH);
 
 cufftExecC2C(plan, data_dev, data_dev, CUFFT_FORWARD); //the first data_dev is the address of input data, and the second  data_dev is address of output data result
 
-// excute cuFFT with forwad FFT, CUFFT_INVERSE is inverse FFT.watch out: InverseFFT needs to diveded by N after execution.
+// excute cuFFT with forwad FFT, CUFFT_INVERSE is inverse FFT.Watch out: InverseFFT needs to be diveded by N after execution.
