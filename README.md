@@ -4,9 +4,10 @@ When using Visual studio, click right button on your project name. Then click on
 
 Then configuration properties, linker, input. In additional dependencies you must write cufft.lib.
 
+## Poisson equation
  ![image](https://github.com/wangjinlong9788/Solve-Poisson-equation-using-CUDA-FFT/blob/master/Possion.PNG)
 
-
+## In Mathematical Methods of Physics, a Poissone quation can be solved using Fourier transformation (or Laplace tranfrmation)
 ![image](https://github.com/wangjinlong9788/Solve-Poisson-equation-using-CUDA-FFT/blob/master/step.PNG)
 
 ## How to use FFT with CUDA(for example, with 1-D):
