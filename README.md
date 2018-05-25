@@ -7,7 +7,7 @@ Then configuration properties, linker, input. In additional dependencies you mus
 ## Poisson equation
  ![image](https://github.com/wangjinlong9788/Solve-Poisson-equation-using-CUDA-FFT/blob/master/Possion.PNG)
 
-## In Mathematical Methods of Physics, a Poisson quation can be solved using Fourier transformation (or Laplace tranformation)
+## In Mathematical Methods of Physics, a Poisson quation can be solved using Fourier transform (or Laplace tranform)
 ![image](https://github.com/wangjinlong9788/Solve-Poisson-equation-using-CUDA-FFT/blob/master/step.PNG)
 
 ## How to use FFT with CUDA(for example, with 1-D):
